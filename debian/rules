@@ -1,0 +1,66 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+#
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+#
+# Modified to make a template file for a multi-binary package with separated
+# build-arch and build-indep targets  by Bill Allombert 2001
+
+# Uncomment this to turn on verbose mode.
+# export DH_VERBOSE=1
+
+# DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+# DPKG_EXPORT_BUILDFLAGS = 1
+# include /usr/share/dpkg/buildflags.mk
+
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+export DH_ALWAYS_EXCLUDE=LICENSE
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+%:
+	dh $@ --with python2
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DPROTON_DISABLE_RPATH=true \
+                             -DNOBUILD_RUBY=on \
+                             -DSYSINSTALL_BINDINGS=on \
+                             -DLIB_INSTALL_DIR=/usr/lib/${DEB_HOST_MULTIARCH}
+
+override_dh_auto_build:
+	dh_auto_build -- all docs
+
+override_dh_auto_test:
+	# TODO enable them when they work again
+
+# Hack for multiarch
+# CMake doesn't really support libdir so we just manually
+# move /usr/lib/* to a proper multi-arch location
+override_dh_auto_install:
+	dh_auto_install
+	mkdir -p debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)
+	# mv debian/tmp/usr/lib/lib*.so* debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)
+	mv debian/tmp/usr/share/proton-0.10 debian/tmp/usr/share/proton
+	chmod +x debian/tmp/usr/share/proton/examples/engine/java/spout
+	chmod +x debian/tmp/usr/share/proton/examples/engine/java/drain
+	chmod +x debian/tmp/usr/share/proton/examples/engine/java/server
+	chmod +x debian/tmp/usr/share/proton/examples/java/messenger/send
+	chmod +x debian/tmp/usr/share/proton/examples/java/messenger/recv
+	chmod +x debian/tmp/usr/share/proton/examples/perl/messenger/client.pl
+	chmod +x debian/tmp/usr/share/proton/examples/perl/messenger/recv.pl
+	chmod +x debian/tmp/usr/share/proton/examples/perl/messenger/send.pl
+	chmod +x debian/tmp/usr/share/proton/examples/perl/messenger/server.pl
+	rm -rf debian/tmp/usr/share/proton/examples/ruby
+	chmod +x debian/tmp/usr/share/proton/examples/javascript/messenger/client.js
+	chmod +x debian/tmp/usr/share/proton/examples/javascript/messenger/drain.js
+	chmod +x debian/tmp/usr/share/proton/examples/javascript/messenger/proxy.js
+	chmod +x debian/tmp/usr/share/proton/examples/javascript/messenger/qpid-config.js
+	chmod +x debian/tmp/usr/share/proton/examples/javascript/messenger/recv.js
+	chmod +x debian/tmp/usr/share/proton/examples/javascript/messenger/send.js
+	chmod +x debian/tmp/usr/share/proton/examples/javascript/messenger/server.js
+	chmod +x debian/tmp/usr/share/proton/examples/javascript/messenger/spout.js
+

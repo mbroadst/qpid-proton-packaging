@@ -1,0 +1,13 @@
+diff --git a/proton-c/CMakeLists.txt b/proton-c/CMakeLists.txt
+index 46cf60e..197c314 100644
+--- a/proton-c/CMakeLists.txt
++++ b/proton-c/CMakeLists.txt
+@@ -350,7 +350,7 @@ add_library (
+   ${qpid-proton-platform}
+   )
+ 
+-target_link_libraries (qpid-proton ${UUID_LIB} ${SSL_LIB} ${SASL_LIB} ${TIME_LIB} ${PLATFORM_LIBS})
++target_link_libraries (qpid-proton uuid ${SSL_LIB} ${SASL_LIB} rt ${PLATFORM_LIBS})
+ 
+ set_target_properties (
+   qpid-proton
