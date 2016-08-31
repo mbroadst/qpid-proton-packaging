@@ -1,0 +1,14 @@
+diff --git a/examples/cpp/CMakeLists.txt b/examples/cpp/CMakeLists.txt
+index 34edb83..8d9850a 100644
+--- a/examples/cpp/CMakeLists.txt
++++ b/examples/cpp/CMakeLists.txt
+@@ -34,8 +34,7 @@ foreach(example
+     client
+     server
+     server_direct
+-    recurring_timer
+-    encode_decode)
++    recurring_timer)
+   add_executable(${example} ${example}.cpp)
+   target_link_libraries(${example} ${ProtonCpp_LIBRARIES})
+   set_source_files_properties(${example}.cpp PROPERTIES COMPILE_FLAGS "${CXX_WARNING_FLAGS}")

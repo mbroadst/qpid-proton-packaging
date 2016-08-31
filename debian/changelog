@@ -1,0 +1,5 @@
+qpid-proton (0.14.0-0xenial+qpid1) xenial; urgency=medium
+
+  * Initial xenial release
+
+ -- Matt Broadstone <mbroadst@gmail.com>  Wed, 31 Aug 2016 09:44:32 -0400
